@@ -13,11 +13,17 @@
     --ink: #1a1a1a;
     --ink-light: #6b6b6b;
     --ink-faint: #c8c8c8;
-    --paper: #f8f6f1;
+    --paper: #e8e4dc;
     --accent: #2d5a3d;
-    --accent-light: #e8f0eb;
+    --accent-light: #dde8e0;
     --serif: 'Cormorant Garamond', Georgia, serif;
     --mono: 'DM Mono', monospace;
+
+    --c1: #2d5a3d;
+    --c2: #3a5278;
+    --c3: #7a4028;
+    --c4: #4a4a6a;
+    --c5: #5a3a5a;
   }
 
   html { scroll-behavior: smooth; }
@@ -78,27 +84,50 @@
     font-size: 11px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--ink-light);
     text-decoration: none;
-    transition: color 0.2s;
+    transition: opacity 0.2s;
   }
-  nav a:hover { color: var(--accent); }
+  nav a:hover { opacity: 0.65; }
 
   section { padding: 4rem 0; border-bottom: 1px solid var(--ink-faint); }
   section:last-of-type { border-bottom: none; }
 
   .section-label {
     font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.15em;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--ink-faint);
     margin-bottom: 1.5rem;
     display: flex;
     align-items: center;
     gap: 1rem;
   }
   .section-label::after { content: ''; flex: 1; height: 1px; background: var(--ink-faint); }
+
+  /* Per-section colors */
+  #motivation .section-label { color: var(--c1); }
+  #motivation .section-label::after { background: var(--c1); opacity: 0.25; }
+
+  #future .section-label { color: var(--c2); }
+  #future .section-label::after { background: var(--c2); opacity: 0.25; }
+
+  #proud .section-label { color: var(--c3); }
+  #proud .section-label::after { background: var(--c3); opacity: 0.25; }
+
+  #journey .section-label { color: var(--c4); }
+  #journey .section-label::after { background: var(--c4); opacity: 0.25; }
+
+  #languages .section-label { color: var(--c5); }
+  #languages .section-label::after { background: var(--c5); opacity: 0.25; }
+
+  /* Nav colors matching sections */
+  nav a[href="#motivation"] { color: var(--c1); }
+  nav a[href="#future"] { color: var(--c2); }
+  nav a[href="#proud"] { color: var(--c3); }
+  nav a[href="#journey"] { color: var(--c4); }
+  nav a[href="#languages"] { color: var(--c5); }
+  nav a:hover { opacity: 0.7; }
 
   .section-title {
     font-size: clamp(1.3rem, 3vw, 1.7rem);
