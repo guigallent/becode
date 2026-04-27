@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guillermo Gallent — BeCode Application</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1a1a;
+    --ink-light: #6b6b6b;
+    --ink-faint: #c8c8c8;
+    --paper: #f8f6f1;
+    --accent: #2d5a3d;
+    --accent-light: #e8f0eb;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --mono: 'DM Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  .container { max-width: 720px; margin: 0 auto; padding: 0 2rem; }
+
+  header { padding: 5rem 0 4rem; border-bottom: 1px solid var(--ink-faint); }
+  .header-inner { display: flex; flex-direction: column; gap: 1rem; }
+  .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  h1 {
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    font-weight: 300;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    font-family: var(--mono);
+  }
+  h1 .hello {
+    font-style: italic;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+  .subtitle { font-size: 1rem; color: var(--ink-light); font-family: var(--mono); font-weight: 300; }
+  .name-line { font-size: 1.05rem; font-family: var(--mono); font-weight: 400; letter-spacing: 0.04em; margin-top: 0.25rem; }
+
+  nav {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--ink-faint);
+    position: sticky;
+    top: 0;
+    background: var(--paper);
+    z-index: 10;
+  }
+  nav ul { display: flex; gap: 2rem; list-style: none; flex-wrap: wrap; }
+  nav a {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--accent); }
+
+  section { padding: 4rem 0; border-bottom: 1px solid var(--ink-faint); }
+  section:last-of-type { border-bottom: none; }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--ink-faint); }
+
+  .section-title {
+    font-size: clamp(1.3rem, 3vw, 1.7rem);
+    font-weight: 300;
+    line-height: 1.3;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+    color: var(--ink);
+  }
+
+  p { margin-bottom: 1.2rem; color: #333; }
+  p:last-child { margin-bottom: 0; }
+
+  .lang-grid { display: flex; flex-direction: column; gap: 1.1rem; margin-top: 1rem; }
+  .lang-row { display: grid; grid-template-columns: 120px 1fr 60px; align-items: center; gap: 1rem; }
+  .lang-name { font-family: var(--mono); font-size: 12px; letter-spacing: 0.05em; }
+  .lang-bar-bg { height: 2px; background: var(--ink-faint); position: relative; overflow: hidden; }
+  .lang-bar-fill {
+    position: absolute; top: 0; left: 0; height: 100%;
+    background: var(--accent); width: 0;
+    transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+  }
+  .lang-level { font-family: var(--mono); font-size: 10px; color: var(--ink-light); text-align: right; letter-spacing: 0.05em; }
+
+  .timeline { position: relative; padding-left: 1.5rem; }
+  .timeline::before {
+    content: ''; position: absolute; left: 0; top: 0.4rem; bottom: 0;
+    width: 1px; background: var(--ink-faint);
+  }
+  .tl-item { position: relative; margin-bottom: 2.5rem; }
+  .tl-item:last-child { margin-bottom: 0; }
+  .tl-dot {
+    position: absolute; left: -1.65rem; top: 0.45rem;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--paper); border: 1px solid var(--accent);
+  }
+  .tl-year { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; color: var(--ink-faint); margin-bottom: 0.25rem; }
+  .tl-role { font-size: 1rem; font-weight: 600; margin-bottom: 0.1rem; }
+  .tl-org { font-size: 0.9rem; font-style: italic; color: var(--ink-light); margin-bottom: 0.4rem; }
+  .tl-desc { font-size: 0.88rem; color: var(--ink-light); line-height: 1.6; }
+
+  .tl-disclaimer {
+    margin-top: 2rem;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    line-height: 1.6;
+  }
+  .tl-disclaimer a { color: var(--accent); text-decoration: none; }
+  .tl-disclaimer a:hover { text-decoration: underline; }
+
+  .future-highlight {
+    font-size: clamp(1.3rem, 3vw, 1.7rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.3;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+  }
+
+  footer { padding: 3rem 0; text-align: center; }
+  .footer-name { font-size: 0.85rem; font-family: var(--mono); color: var(--ink-faint); letter-spacing: 0.08em; }
+  .footer-name a { color: var(--accent); text-decoration: none; }
+  .footer-name a:hover { text-decoration: underline; }
+
+  @media (max-width: 500px) {
+    .lang-row { grid-template-columns: 90px 1fr 50px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner reveal">
+      <div class="tag">BeCode — AI &amp; Data Science Bootcamp</div>
+      <h1>print("<span class="hello">Hello BeCode!</span>")</h1>
+      <div class="name-line">Guillermo Gallent</div>
+      <div class="subtitle">Brussels &nbsp;·&nbsp; EU Affairs specialist seeking a career re-orientation in the data and AI domain</div>
+    </div>
+  </header>
+
+  <!-- NAV -->
+  <nav>
+    <ul>
+      <li><a href="#motivation">Motivation</a></li>
+      <li><a href="#future">Future</a></li>
+      <li><a href="#proud">Proud moment</a></li>
+      <li><a href="#journey">Journey</a></li>
+      <li><a href="#languages">Languages</a></li>
+    </ul>
+  </nav>
+
+  <!-- 01 MOTIVATION -->
+  <section id="motivation">
+    <div class="section-label">01 — Why BeCode's AI &amp; Data Science Bootcamp</div>
+    <div class="reveal">
+      <p class="section-title">I want to reset and reposition my career to be more data-driven and future-proof.</p>
+      <p>For the past year and a half, I have been navigating a difficult professional transition — officially unemployed since the start of 2026. My background is in EU public affairs, where I spent years analysing policy across a range of sectors. It is a field I know well, but also one that is increasingly saturated, competitive, and under pressure from the very tools — AI among them — that are reshaping how policy analysis is done.</p>
+      <p>I am someone with wide-ranging interests who genuinely enjoys learning and reinventing myself. BeCode's AI &amp; Data Science Bootcamp feels like the right opportunity to reconnect with a side of me that predates my career in public affairs: before choosing international relations, I followed the scientific track at secondary school, studied basic C++ programming, and seriously considered studying computer engineering. I would like to reconcile that past with my professional experience.</p>
+      <p>Learning Python, SQL, and Power BI while building a grounding in the fundamentals of generative AI are skills I will be able to apply regardless of where my career takes me next. I am genuinely open to being inspired by the different modules of the bootcamp and letting that shape where I orient my professional future — which is, I think, exactly the right mindset for this kind of training.</p>
+    </div>
+  </section>
+
+  <!-- 02 FUTURE -->
+  <section id="future">
+    <div class="section-label">02 — A year from now</div>
+    <div class="reveal">
+      <p class="future-highlight">I want to work as a data analyst, ideally at the intersection with public policy or in a field with strong ethical principles.</p>
+      <p>In one year, I see myself working as a data-driven policy professional, combining my experience in EU affairs with strong analytical and technical skills developed through this training. I aim to analyse complex datasets and translate them into clear, evidence-based policy recommendations, particularly in the fields of trade and climate. I am especially interested in roles within NGOs and think tanks, where I can contribute to influencing policymaking. At the same time, I remain open to exploring emerging applications of AI and how they can be applied in a policy context.</p>
+    </div>
+  </section>
+
+  <!-- 03 PROUD MOMENT -->
+  <section id="proud">
+    <div class="section-label">03 — Proudest moment</div>
+    <div class="reveal">
+      <p class="section-title">Finalising my violin studies in parallel to my university studies.</p>
+      <p>I completed a ten-year violin career at the conservatory while simultaneously finishing my Master's degree. Mornings were for university; three afternoons a week, I was at the conservatory — violin lessons, orchestra, chamber ensemble, harmony, music history. It was relentless, but I saw it through. I not only completed my conservatory studies, but also graduated with the highest grades of my cohort for the Master's.</p>
+      <p>It taught me something I have carried since: that sustained effort across multiple demanding commitments is possible, as long as the motivation is genuine.</p>
+    </div>
+  </section>
+
+  <!-- 04 JOURNEY -->
+  <section id="journey">
+    <div class="section-label">04 — Professional journey</div>
+    <div class="reveal">
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">Apr 2021 – Jan 2026</div>
+          <div class="tl-role">EU Public Affairs Consultant</div>
+          <div class="tl-org">Polint Ltd &nbsp;·&nbsp; Brussels</div>
+          <div class="tl-desc">Advising clients on EU regulatory affairs, trade policy, and institutional engagement across the European institutions.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">Oct 2020 – Feb 2021</div>
+          <div class="tl-role">Trainee</div>
+          <div class="tl-org">EEAS — European External Action Service &nbsp;·&nbsp; Brussels</div>
+          <div class="tl-desc">External relations and diplomatic affairs. Focus on Asia-Pacific desk.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-year">Academic</div>
+          <div class="tl-role">MA International Relations &amp; BA East Asian Studies</div>
+          <div class="tl-org">Institut Barcelona d'Estudis Internacionals (IBEI) &amp; Autonomous University of Barcelona</div>
+          <div class="tl-desc">Academic focus on EU-Japan relations, trade, and diplomacy. Exchange year in Japan (2014–2015) and semester in South Korea (2018–2019).</div>
+        </div>
+      </div>
+      <p class="tl-disclaimer">This is a simplified overview of my professional background. For a full picture, visit my <a href="https://www.linkedin.com/in/guillermo-gallent/" target="_blank" rel="noopener">LinkedIn profile ↗</a></p>
+    </div>
+  </section>
+
+  <!-- 05 LANGUAGES -->
+  <section id="languages">
+    <div class="section-label">05 — Languages</div>
+    <div class="reveal">
+      <p style="margin-bottom:2rem; font-size:0.9rem; color:var(--ink-light); font-family:var(--mono);">Human languages first. Programming languages next.</p>
+      <div class="lang-grid" id="lang-grid">
+        <div class="lang-row">
+          <span class="lang-name">Spanish</span>
+          <div class="lang-bar-bg"><div class="lang-bar-fill" data-w="100"></div></div>
+          <span class="lang-level">Native</span>
+        </div>
+        <div class="lang-row">
+          <span class="lang-name">Catalan</span>
+          <div class="lang-bar-bg"><div class="lang-bar-fill" data-w="100"></div></div>
+          <span class="lang-level">Native</span>
+        </div>
+        <div class="lang-row">
+          <span class="lang-name">English</span>
+          <div class="lang-bar-bg"><div class="lang-bar-fill" data-w="95"></div></div>
+          <span class="lang-level">C2</span>
+        </div>
+        <div class="lang-row">
+          <span class="lang-name">Portuguese</span>
+          <div class="lang-bar-bg"><div class="lang-bar-fill" data-w="75"></div></div>
+          <span class="lang-level">B2</span>
+        </div>
+        <div class="lang-row">
+          <span class="lang-name">Japanese</span>
+          <div class="lang-bar-bg"><div class="lang-bar-fill" data-w="70"></div></div>
+          <span class="lang-level">B2</span>
+        </div>
+        <div class="lang-row">
+          <span class="lang-name">French</span>
+          <div class="lang-bar-bg"><div class="lang-bar-fill" data-w="60"></div></div>
+          <span class="lang-level">B1–B2</span>
+        </div>
+        <div class="lang-row" style="margin-top:1rem; opacity:0.45;">
+          <span class="lang-name">C++</span>
+          <div class="lang-bar-bg"><div class="lang-bar-fill" data-w="10"></div></div>
+          <span class="lang-level">Basics</span>
+        </div>
+        <div class="lang-row" style="opacity:0.45;">
+          <span class="lang-name">SQL</span>
+          <div class="lang-bar-bg"><div class="lang-bar-fill" data-w="10"></div></div>
+          <span class="lang-level">Basics</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-name">
+      Guillermo Gallent &nbsp;·&nbsp; Brussels &nbsp;·&nbsp; 2026 &nbsp;·&nbsp;
+      <a href="https://www.linkedin.com/in/guillermo-gallent/" target="_blank" rel="noopener">LinkedIn ↗</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+
+  const langSection = document.getElementById('languages');
+  const barObserver = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      document.querySelectorAll('.lang-bar-fill').forEach(bar => {
+        setTimeout(() => { bar.style.width = bar.dataset.w + '%'; }, 200);
+      });
+      barObserver.disconnect();
+    }
+  }, { threshold: 0.3 });
+  barObserver.observe(langSection);
+</script>
+
+</body>
+</html>
